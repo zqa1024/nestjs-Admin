@@ -3,6 +3,8 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Inject,
+  Logger,
   Post,
   Req,
   UseGuards,
@@ -20,7 +22,10 @@ import { GetCurrentUser } from 'src/common/decorators/get-current-user.decorator
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    @Inject('UsersLogger') private readonly logger: Logger,
+  ) {}
 
   @Publish()
   @Post('/local/signup')
@@ -40,7 +45,8 @@ export class AuthController {
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   louout(@GetCurrentUserId() userId: number): Promise<boolean> {
-    console.log('userId', userId);
+    // console.log('userId', userId);
+    this.logger.log(userId);
     return this.authService.louout(userId);
   }
 

@@ -6,12 +6,14 @@ import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private config: ConfigService,
   ) {}
 
   hashData(data: string) {
@@ -23,14 +25,14 @@ export class AuthService {
       this.jwtService.signAsync(
         { sub: userId, email },
         {
-          secret: 'at-secret',
+          secret: this.config.get<string>('AT_SECRET'),
           expiresIn: 60 * 10,
         },
       ),
       this.jwtService.signAsync(
         { sub: userId, email },
         {
-          secret: 'rt-secret',
+          secret: this.config.get<string>('RT_SECRET'),
           expiresIn: 60 * 60 * 24 * 7,
         },
       ),
