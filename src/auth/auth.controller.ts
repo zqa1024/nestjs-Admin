@@ -3,28 +3,26 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  Inject,
-  Logger,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
-import { Tokens } from './types';
+
 import { Publish } from 'src/common/decorators';
 import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
-import { Request } from 'express';
-import { AuthGuard } from '@nestjs/passport';
 import { RtGuard } from 'src/common/guards';
 import { AtGuard } from 'src/common/guards/at.guards';
 import { GetCurrentUser } from 'src/common/decorators/get-current-user.decorator';
+
+import { AuthService } from './auth.service';
+import { AuthDto } from './dto';
+import { Tokens } from './types';
+import { CustomLoggerService } from 'src/common/customLogger.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    @Inject('UsersLogger') private readonly logger: Logger,
+    private readonly customLogger: CustomLoggerService,
   ) {}
 
   @Publish()
@@ -38,6 +36,7 @@ export class AuthController {
   @Post('/local/signin')
   @HttpCode(HttpStatus.OK)
   singinLocal(@Body() dto: AuthDto): Promise<Tokens> {
+    this.customLogger.log('Hello world');
     return this.authService.singinLocal(dto);
   }
 
@@ -46,7 +45,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   louout(@GetCurrentUserId() userId: number): Promise<boolean> {
     // console.log('userId', userId);
-    this.logger.log(userId);
+
     return this.authService.louout(userId);
   }
 

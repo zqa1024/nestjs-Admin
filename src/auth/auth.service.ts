@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as bcrypt from 'bcrypt';
@@ -10,6 +10,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
@@ -85,6 +87,7 @@ export class AuthService {
 
   //本地登录
   async singinLocal(dto: AuthDto): Promise<Tokens> {
+    // this.myMethod();
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,

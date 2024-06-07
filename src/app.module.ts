@@ -4,13 +4,17 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AtGuard } from './common/guards/at.guards';
+import { WinstonModule } from 'nest-winston';
+
+import { winstonConfig } from '../logger/winston.logger';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    AuthModule,
     PrismaModule,
     UsersModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    WinstonModule.forRoot(winstonConfig),
   ],
   providers: [
     {

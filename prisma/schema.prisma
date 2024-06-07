@@ -23,3 +23,12 @@ model User {
 
   @@map("users")
 }
+
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  level     String
+  message   String
+  meta      Json?
+  timestamp DateTime @default(now())
+}
