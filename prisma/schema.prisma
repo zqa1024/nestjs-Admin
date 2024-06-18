@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,20 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-
-  email         String    @unique
-  hash          String
-  hashedRt      String?
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  email     String      @unique
+  hash      String
+  hashedRt  String?
+  account   String
+  avatar    String?
+  status    BasicStatus @default(ENABLE)
+  roles     Role?
 
   @@map("users")
 }
-
 
 model Log {
   id        Int      @id @default(autoincrement())
@@ -31,4 +28,15 @@ model Log {
   message   String
   meta      Json?
   timestamp DateTime @default(now())
+}
+
+model Role {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+}
+
+enum BasicStatus {
+  DISABLE
+  ENABLE
 }

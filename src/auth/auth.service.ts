@@ -69,6 +69,7 @@ export class AuthService {
         data: {
           email: dto.email,
           hash,
+          account: dto.account,
         },
       })
       .catch((error) => {
