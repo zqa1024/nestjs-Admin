@@ -8,15 +8,15 @@ datasource db {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  email     String      @unique
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
   hash      String
   hashedRt  String?
-  account   String
+  username  String   @unique
   avatar    String?
-  status    BasicStatus @default(ENABLE)
+  status    Int      @default(1)
   roles     Role?
 
   @@map("users")
