@@ -8,7 +8,7 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ConfigService } from '@nestjs/config';
 
-const permission = [
+const permissions = [
   {
     id: '9100714781927703',
     parentId: '',
@@ -550,7 +550,7 @@ export class AuthService {
         refreshToken: tokens.refresh_token,
         user: {
           ...user,
-          permission,
+          permissions,
           role: {
             desc: 'Super Admin',
             id: '4281707933534332',
@@ -558,7 +558,7 @@ export class AuthService {
             name: 'Admin',
             order: 1,
             status: 1,
-            permission,
+            permissions,
           },
         },
       },
