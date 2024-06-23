@@ -1,0 +1,15 @@
+model MenuItem {
+    id       Int        @id @default(autoincrement())
+    label    String
+    parent   MenuItem?  @relation("ChildToParent", fields: [parentId], references: [id])
+    parentId Int?
+    children MenuItem[] @relation("ChildToParent")
+}
+
+// model MenuItem {
+//     id       Int        @id @default(autoincrement())
+//     label    String
+//     parent   MenuItem?  @relation("ChildToParent", fields: [parentId], references: [id])
+//     parentId Int?
+//     children MenuItem[] @relation("ChildToParent")
+// }

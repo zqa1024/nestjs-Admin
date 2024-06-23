@@ -31,9 +31,37 @@ model Log {
 }
 
 model Role {
-  id     Int  @id @default(autoincrement())
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
+  id     Int     @id @default(autoincrement())
+  userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
+  name   String
+  status Int     @default(1)
+  label  String
+  order  Int?
+  desc   String?
+
+  permission Permission[]
+}
+
+model Permission {
+  id        String       @id @default(cuid())
+  name      String       @unique
+  icon      String?
+  label     String?
+  component String
+  route     String
+  // 1: 目录 2: 菜单 3: 按钮
+  type      Int          @default(1)
+  // true: 启用 false: 禁用
+  hide      Boolean      @default(false)
+  // true: 启用 false: 禁用
+  status    Int          @default(1)
+  order     Int?
+  parentId  String?
+  children  Permission[] @relation("ChildToParent")
+  parent    Permission?  @relation("ChildToParent", fields: [parentId], references: [id])
+  Role      Role?        @relation(fields: [roleId], references: [id])
+  roleId    Int?
 }
 
 enum BasicStatus {

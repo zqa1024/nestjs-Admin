@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { Tokens } from './types';
@@ -455,7 +455,7 @@ export class AuthService {
         { sub: userId, email },
         {
           secret: this.config.get<string>('AT_SECRET'),
-          expiresIn: 60 * 10,
+          expiresIn: 60 * 60 * 10,
         },
       ),
       this.jwtService.signAsync(

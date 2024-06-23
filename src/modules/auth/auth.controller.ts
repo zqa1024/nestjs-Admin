@@ -7,16 +7,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { Publish } from 'src/common/decorators';
-import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
-import { RtGuard } from 'src/common/guards';
-import { AtGuard } from 'src/common/guards/at.guards';
-import { GetCurrentUser } from 'src/common/decorators/get-current-user.decorator';
+import { Publish } from 'src/modules/common/decorators';
+import { GetCurrentUserId } from 'src/modules/common/decorators/get-current-user-id.decorator';
+import { RtGuard } from 'src/modules/common/guards';
+import { AtGuard } from 'src/modules/common/guards/at.guards';
+import { GetCurrentUser } from 'src/modules/common/decorators/get-current-user.decorator';
 
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { Tokens } from './types';
-import { CustomLoggerService } from 'src/common/customLogger.service';
+import { CustomLoggerService } from 'src/modules/common/customLogger.service';
 
 @Controller('auth')
 export class AuthController {
