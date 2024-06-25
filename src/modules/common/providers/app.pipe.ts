@@ -28,6 +28,10 @@ export class AppValidationPipe extends ValidationPipe {
     const dto = metatype as any;
     // 获取dto上的装饰器配置
     const options = Reflect.getMetadata(DTO_VALIDATION_OPTIONS, dto);
+    // 如果没有配置，直接返回
+    if (!options) {
+      return super.transform(value, metadata);
+    }
     // 获取原始的配置
     const originOptions = { ...this.validatorOptions };
     const originTransformOptions = { ...this.transformOptions };
@@ -85,6 +89,8 @@ export class AppValidationPipe extends ValidationPipe {
     this.validatorOptions = originOptions;
     //重置transformOptions
     this.transformOptions = originTransformOptions;
+
+    console.log('result', result, value);
 
     return result;
   }

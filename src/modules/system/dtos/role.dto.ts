@@ -13,23 +13,23 @@ export class CreateRoleDto {
   @IsNotEmpty()
   name!: string;
 
-  @IsOptional()
-  icon: string;
+  // @IsOptional()
+  // icon: string;
 
   @IsOptional()
   label!: string;
 
-  @IsNotEmpty()
-  component: string;
+  // @IsNotEmpty()
+  // component: string;
 
-  @IsNotEmpty()
-  route: string;
+  // @IsNotEmpty()
+  // route: string;
 
-  @IsNotEmpty()
-  type: number;
+  // @IsNotEmpty()
+  // type: number;
 
-  @IsNotEmpty()
-  hide: boolean;
+  // @IsNotEmpty()
+  // hide: boolean;
 
   @IsNotEmpty()
   status: number;
@@ -38,10 +38,13 @@ export class CreateRoleDto {
   order?: number;
 
   @IsOptional()
-  parentId?: string;
+  desc?: string;
 
-  @IsOptional()
-  children?: CreateRoleDto[];
+  // @IsOptional()
+  // parentId?: string;
+
+  // @IsOptional()
+  // children?: CreateRoleDto[];
 }
 
 @DtoValidation({ groups: ['update'] })

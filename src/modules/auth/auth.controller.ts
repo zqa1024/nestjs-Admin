@@ -36,7 +36,7 @@ export class AuthController {
   @Post('/local/signin')
   @HttpCode(HttpStatus.OK)
   singinLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    this.customLogger.log('Hello world');
+    // this.customLogger.log('Hello world');
     return this.authService.singinLocal(dto);
   }
 

@@ -17,7 +17,7 @@ model User {
   username  String   @unique
   avatar    String?
   status    Int      @default(1)
-  roles     Role?
+  roles     Role[]   @relation("UserRoles")
 
   @@map("users")
 }
@@ -32,15 +32,14 @@ model Log {
 
 model Role {
   id     Int     @id @default(autoincrement())
-  userId Int     @unique
-  user   User    @relation(fields: [userId], references: [id])
   name   String
   status Int     @default(1)
   label  String
   order  Int?
   desc   String?
 
-  permission Permission[]
+  permissions Permission[]  @relation("RolePermissions")
+  user        User[]    @relation("UserRoles")
 }
 
 model Permission {
@@ -60,8 +59,8 @@ model Permission {
   parentId  String?
   children  Permission[] @relation("ChildToParent")
   parent    Permission?  @relation("ChildToParent", fields: [parentId], references: [id])
-  Role      Role?        @relation(fields: [roleId], references: [id])
-  roleId    Int?
+
+  roles Role[] @relation("RolePermissions")
 }
 
 enum BasicStatus {
