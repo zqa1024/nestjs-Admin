@@ -23,6 +23,6 @@ export class RoleController {
   @Post('update')
   async updateRole(@Body() dto: UpdateRoleDto) {
     console.log('dto', dto);
-    return 'Role Updated';
+    return this.roleService.updateRole(dto);
   }
 }

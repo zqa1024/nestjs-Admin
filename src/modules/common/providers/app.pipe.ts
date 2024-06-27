@@ -2,6 +2,7 @@ import {
   ArgumentMetadata,
   Injectable,
   Paramtype,
+  PipeTransform,
   ValidationPipe,
 } from '@nestjs/common';
 import { DTO_VALIDATION_OPTIONS } from '../constants';
@@ -9,11 +10,11 @@ import * as merge from 'deepmerge';
 import { isObject, omit } from 'lodash';
 
 @Injectable()
-export class AppValidationPipe extends ValidationPipe {
-  constructor(val) {
-    console.log('val', val);
-    super(val);
-  }
+export class AppValidationPipe extends ValidationPipe implements PipeTransform {
+  // constructor(val) {
+  //   console.log('val', val);
+  //   super(val);
+  // }
 
   /**
    *
@@ -48,13 +49,10 @@ export class AppValidationPipe extends ValidationPipe {
     // 合并当前transform选项和自定义选项
     // merge.arrayMerge是一个函数，用于合并数组，这里的作用是直接返回sourceArray，即直接使用自定义配置，不使用默认配置
     if (transformOptions) {
-      this.transformOptions = merge(
-        this.transformOptions,
-        transformOptions ?? {},
-        {
+      this.transformOptions =
+        merge(this.transformOptions, transformOptions ?? {}, {
           arrayMerge: (destinationArray, sourceArray) => sourceArray,
-        },
-      );
+        }) ?? {};
     }
     console.log('this.transformOptions', this.transformOptions);
     console.log('this.validatorOptions', this.validatorOptions, customOptions);
@@ -63,7 +61,7 @@ export class AppValidationPipe extends ValidationPipe {
       arrayMerge: (destinationArray, sourceArray) => sourceArray,
     });
 
-    console.log(111111, this.validatorOptions);
+    // console.log(111111, this.validatorOptions);
     // 因为上传文件时,文件对象中的fields属性是一个对象,这个对象中包含了文件的其他信息,例如文件名,文件大小等
     const toValidate = isObject(value)
       ? Object.fromEntries(
@@ -76,8 +74,11 @@ export class AppValidationPipe extends ValidationPipe {
         )
       : value;
 
+    console.log('toValidate', toValidate);
     // 调用父类的transform方法
     let result = await super.transform(toValidate, metadata);
+    console.log('result', result);
+
     // 如果dto类的中存在transform静态方法,则返回调用进一步transform之后的结果
     if (typeof result.transform === 'function') {
       result = await result.transform(result);
@@ -89,8 +90,6 @@ export class AppValidationPipe extends ValidationPipe {
     this.validatorOptions = originOptions;
     //重置transformOptions
     this.transformOptions = originTransformOptions;
-
-    console.log('result', result, value);
 
     return result;
   }

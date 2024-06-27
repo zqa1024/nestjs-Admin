@@ -1,6 +1,7 @@
 import {
   IsDefined,
   IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
@@ -10,14 +11,17 @@ import { PartialType } from '@nestjs/swagger';
 
 @DtoValidation({ groups: ['create'] })
 export class CreateRoleDto {
+  @IsDefined({ groups: ['create'], message: 'name 必须指定' })
   @IsNotEmpty()
-  name!: string;
+  @IsString({ message: 'name 必须是字符串类型' })
+  name: string;
 
   // @IsOptional()
   // icon: string;
 
-  @IsOptional()
-  label!: string;
+  @IsDefined({ groups: ['create'] })
+  @IsOptional({ groups: ['update'] })
+  label: string;
 
   // @IsNotEmpty()
   // component: string;
@@ -31,6 +35,7 @@ export class CreateRoleDto {
   // @IsNotEmpty()
   // hide: boolean;
 
+  @IsDefined({ groups: ['create'], message: 'status 必须指定' })
   @IsNotEmpty()
   status: number;
 
@@ -41,7 +46,7 @@ export class CreateRoleDto {
   desc?: string;
 
   // @IsOptional()
-  // parentId?: string;
+  // parentId?: string
 
   // @IsOptional()
   // children?: CreateRoleDto[];
@@ -51,6 +56,11 @@ export class CreateRoleDto {
 export class UpdateRoleDto extends PartialType(CreateRoleDto) {
   @IsDefined({ groups: ['update'], message: 'ID 必须指定' })
   @IsNotEmpty({ message: 'ID 不能为空' })
-  @IsString({ message: 'ID 必须是字符串类型' })
-  id!: string;
+  @IsNumber()
+  id: number;
+
+  @IsDefined({ groups: ['update'], message: 'ID 必须指定' })
+  // @IsNotEmpty({ message: 'ID 不能为空' })
+  // @IsString({ message: 'ID 必须是字符串类型' })
+  name!: string;
 }

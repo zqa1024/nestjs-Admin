@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { CreateRoleDto } from '../dtos';
+import { CreateRoleDto, UpdateRoleDto } from '../dtos';
 
 @Injectable()
 export class RoleService {
@@ -16,7 +16,16 @@ export class RoleService {
     return result;
   }
 
-  updateRole() {
-    return 'Role Updated';
+  updateRole(dto: UpdateRoleDto) {
+    const { id, ...rest } = dto;
+    const result = this.prisma.role.update({
+      where: {
+        id,
+      },
+      data: {
+        ...rest,
+      },
+    });
+    return result;
   }
 }
