@@ -29,8 +29,8 @@ import { AppValidationPipe } from './modules/common/providers';
       provide: APP_PIPE,
       useValue: new AppValidationPipe({
         transform: true, // 是否自动转换类型
-        forbidUnknownValues: false, // 是否禁止未知属性
-        validationError: { target: false }, // 是否返回完整的错误信息
+        // forbidUnknownValues: false, // 是否禁止未知属性
+        // validationError: { target: false }, // 是否返回完整的错误信息
         whitelist: true, // 是否只返回白名单属性
       }),
     },

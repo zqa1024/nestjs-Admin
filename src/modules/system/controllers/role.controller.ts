@@ -17,12 +17,12 @@ export class RoleController {
     const options =
       this.reflector.get(DTO_VALIDATION_OPTIONS, CreateRoleDto) || {};
     console.log('options', options);
-    return this.roleService.createRole(dto);
+    return await this.roleService.createRole(dto);
   }
 
   @Post('update')
   async updateRole(@Body() dto: UpdateRoleDto) {
     console.log('dto', dto);
-    return this.roleService.updateRole(dto);
+    return await this.roleService.updateRole(dto);
   }
 }

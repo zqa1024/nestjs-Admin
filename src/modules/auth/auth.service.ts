@@ -489,6 +489,7 @@ export class AuthService {
 
   //本地注册
   async signupLocal(dto: AuthDto): Promise<Tokens> {
+    console.log('signupLocal', dto);
     const { password, ...rest } = dto;
     const hash = await argon.hash(password);
 
@@ -519,6 +520,7 @@ export class AuthService {
   //本地登录
   async singinLocal(dto: AuthDto): Promise<any> {
     // this.myMethod();
+    console.log('singinLocal', dto);
     const user = await this.prisma.user.findUnique({
       where: {
         username: dto.username,

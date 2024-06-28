@@ -31,7 +31,9 @@ export class AppValidationPipe extends ValidationPipe implements PipeTransform {
     const options = Reflect.getMetadata(DTO_VALIDATION_OPTIONS, dto);
     // 如果没有配置，直接返回
     if (!options) {
-      return super.transform(value, metadata);
+      const v = await super.transform(value, metadata);
+      console.log('v', v);
+      return v;
     }
     // 获取原始的配置
     const originOptions = { ...this.validatorOptions };
