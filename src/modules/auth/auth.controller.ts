@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -58,5 +59,11 @@ export class AuthController {
     @GetCurrentUser('refreshToken') refreshToken: string,
   ): Promise<Tokens> {
     return this.authService.refreshTokens(userId, refreshToken);
+  }
+
+  @Get('/currentUser')
+  async currentUser(@GetCurrentUserId() userId: number): Promise<any> {
+    console.log('userId', userId);
+    return await this.authService.currentUser(userId);
   }
 }

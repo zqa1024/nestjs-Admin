@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
   CreateRoleDto,
   UpdateRoleDto,
@@ -15,6 +15,12 @@ export class PermissionController {
     private reflector: Reflector,
     private permissionService: PermissionService,
   ) {}
+
+  @Get('getList')
+  async getList() {
+    console.log('getList');
+    return await this.permissionService.getList();
+  }
 
   @Post('create')
   async createRole(@Body() dto: CreatePermissionDto) {

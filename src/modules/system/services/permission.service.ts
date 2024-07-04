@@ -1,4 +1,4 @@
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'nestjs-Prisma';
 import { CreatePermissionDto } from '../dtos';
 import { Injectable } from '@nestjs/common';
 import { omit } from 'lodash';
@@ -6,6 +6,12 @@ import { omit } from 'lodash';
 @Injectable()
 export class PermissionService {
   constructor(private prisma: PrismaService) {}
+
+  async getList() {
+    return await this.prisma.permission.findMany();
+    // return await this.prisma.permission?.findAndCount();
+  }
+
   async createPermission(dto: CreatePermissionDto) {
     console.log('dto>>>>>', dto);
     const result = await this.prisma.permission.create({

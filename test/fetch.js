@@ -73,9 +73,17 @@ const updatePromission = async () => {
   });
 };
 
+const getPromission = async () => {
+  return await newFetch({
+    url: '/permission/getList',
+    method: 'GET',
+  });
+};
+
 (async () => {
   //   const res = await createRoles();
   //   const res = await createPromission();
-  const res = await updatePromission();
+  //   const res = await updatePromission();
+  const res = await getPromission();
   console.log('res111', res);
 })();

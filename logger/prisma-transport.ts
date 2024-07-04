@@ -19,7 +19,6 @@ export class PrismaTransport extends TransportStream {
     });
 
     const { level, message, ...meta } = info;
-    console.log('info', info);
     try {
       await prisma.log.create({
         data: {

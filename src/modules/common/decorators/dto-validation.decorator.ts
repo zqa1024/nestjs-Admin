@@ -13,14 +13,14 @@ export const DtoValidation = (
   },
 ) => {
   return (target: any) => {
-    console.log('options', target, options);
+    // console.log('options', target, options);
     const newTarget = SetMetadata(DTO_VALIDATION_OPTIONS, options)(target);
 
-    console.log(
-      'newTarget',
-      Reflect.getMetadata(DTO_VALIDATION_OPTIONS, newTarget),
-    );
-    console.log('target', Reflect.getMetadata(DTO_VALIDATION_OPTIONS, target));
+    // console.log(
+    //   'newTarget',
+    //   Reflect.getMetadata(DTO_VALIDATION_OPTIONS, newTarget),
+    // );
+    // console.log('target', Reflect.getMetadata(DTO_VALIDATION_OPTIONS, target));
 
     //log
     //newTarget { groups: [ 'create' ] }

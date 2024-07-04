@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'nestjs-Prisma';
 import { AuthDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { Tokens } from './types';
@@ -545,24 +545,9 @@ export class AuthService {
     await this.updateRtHash(user.id, tokens.refresh_token);
 
     const res = {
-      status: 0,
-      message: '',
       data: {
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
-        user: {
-          ...user,
-          permissions,
-          role: {
-            desc: 'Super Admin',
-            id: '4281707933534332',
-            label: 'admin',
-            name: 'Admin',
-            order: 1,
-            status: 1,
-            permissions,
-          },
-        },
       },
     };
     return res;
@@ -607,5 +592,32 @@ export class AuthService {
       },
     });
     return true;
+  }
+
+  //获取用户信息
+  async currentUser(userId: number) {
+    if (!userId) {
+      throw new ForbiddenException('Access Denied');
+    }
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    return {
+      data: {
+        ...user,
+        permissions,
+        role: {
+          desc: 'Super Admin',
+          id: '4281707933534332',
+          label: 'admin',
+          name: 'Admin',
+          order: 1,
+          status: 1,
+          permissions,
+        },
+      },
+    };
   }
 }
