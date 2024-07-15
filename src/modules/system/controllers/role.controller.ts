@@ -3,8 +3,10 @@ import { CreateRoleDto, UpdateRoleDto } from '../dtos';
 import { DTO_VALIDATION_OPTIONS } from 'src/modules/common/constants';
 import { Reflector } from '@nestjs/core';
 import { RoleService } from '../services';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('role')
+@ApiTags('role')
 export class RoleController {
   constructor(
     private reflector: Reflector,

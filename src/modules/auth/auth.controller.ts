@@ -18,8 +18,10 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { Tokens } from './types';
 import { CustomLoggerService } from 'src/modules/common/customLogger.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -29,36 +31,36 @@ export class AuthController {
   @Publish()
   @Post('/local/signup')
   @HttpCode(HttpStatus.CREATED)
-  signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    return this.authService.signupLocal(dto);
+  async signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
+    return await this.authService.signupLocal(dto);
   }
 
   @Publish()
   @Post('/local/signin')
   @HttpCode(HttpStatus.OK)
-  singinLocal(@Body() dto: AuthDto): Promise<Tokens> {
+  async singinLocal(@Body() dto: AuthDto): Promise<Tokens> {
     // this.customLogger.log('Hello world');
-    return this.authService.singinLocal(dto);
+    return await this.authService.singinLocal(dto);
   }
 
   @UseGuards(AtGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  louout(@GetCurrentUserId() userId: number): Promise<boolean> {
+  async louout(@GetCurrentUserId() userId: number): Promise<boolean> {
     // console.log('userId', userId);
 
-    return this.authService.louout(userId);
+    return await this.authService.louout(userId);
   }
 
   @Publish()
   @UseGuards(RtGuard)
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
-  refreshTokens(
+  async refreshTokens(
     @GetCurrentUserId() userId: number,
     @GetCurrentUser('refreshToken') refreshToken: string,
   ): Promise<Tokens> {
-    return this.authService.refreshTokens(userId, refreshToken);
+    return await this.authService.refreshTokens(userId, refreshToken);
   }
 
   @Get('/currentUser')

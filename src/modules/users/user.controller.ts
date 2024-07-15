@@ -2,8 +2,10 @@ import { Controller, Post } from '@nestjs/common';
 import { Publish } from '../common/decorators';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Redis } from 'ioredis';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiTags('user')
 export class UserController {
   constructor(@InjectRedis() private readonly redis: Redis) {}
   @Publish()

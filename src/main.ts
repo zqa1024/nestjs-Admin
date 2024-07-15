@@ -4,6 +4,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { AtGuard } from './modules/common/guards/at.guards';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
+import {
+  DocumentBuilder,
+  SwaggerDocumentOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,8 +35,21 @@ async function bootstrap() {
   // 这里使用需要手动注入依赖
   // app.useGlobalGuards(new AtGuard());
 
+  // 设置swagger
+  const config = new DocumentBuilder()
+    .setTitle('APIS')
+    .setVersion('1.0')
+    .build();
+  const options: SwaggerDocumentOptions = {
+    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
+  };
+  const document = SwaggerModule.createDocument(app, config, options);
+  SwaggerModule.setup('api', app, document, {
+    jsonDocumentUrl: 'swagger/json',
+  });
+
   await app.listen(port);
 
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`Application is running on1: ${await app.getUrl()}`);
 }
 bootstrap();

@@ -8,8 +8,10 @@ import {
 import { DTO_VALIDATION_OPTIONS } from 'src/modules/common/constants';
 import { Reflector } from '@nestjs/core';
 import { PermissionService } from '../services';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('permission')
+@ApiTags('permission')
 export class PermissionController {
   constructor(
     private reflector: Reflector,
