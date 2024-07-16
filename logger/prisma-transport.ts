@@ -2,7 +2,7 @@ import { TransportStreamOptions } from 'winston-transport';
 import TransportStream = require('winston-transport');
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({});
 
 interface PrismaTransportOptions extends TransportStreamOptions {
   level?: string;

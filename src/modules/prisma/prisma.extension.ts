@@ -1,6 +1,13 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 
-export const extendedPrismaClient = new PrismaClient().$extends({
+export const extendedPrismaClient = new PrismaClient({
+  omit: {
+    user: {
+      hash: true,
+      hashedRt: true,
+    },
+  },
+}).$extends({
   model: {
     $allModels: {
       async findAndCount<T, A>(
@@ -18,14 +25,6 @@ export const extendedPrismaClient = new PrismaClient().$extends({
           list,
           total,
         };
-      },
-    },
-  },
-  client: {
-    omit: {
-      user: {
-        hash: true,
-        hashedRt: true,
       },
     },
   },

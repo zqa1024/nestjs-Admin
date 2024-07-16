@@ -22,7 +22,8 @@ export class PrismaService implements PrismaOptionsFactory {
         },
         omit: {
           user: {
-            password: true,
+            hash: true,
+            hashedRt: true,
           },
         },
       },
