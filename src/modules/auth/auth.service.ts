@@ -497,7 +497,7 @@ export class AuthService {
       .create({
         data: {
           ...rest,
-          email: dto.email,
+          email: dto?.email,
           hash,
           username: dto.username,
         },
@@ -551,8 +551,6 @@ export class AuthService {
       },
     };
     return res;
-
-    return tokens;
   }
 
   //获取刷新 token

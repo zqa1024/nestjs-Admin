@@ -1,25 +1,30 @@
-export class AjaxResult {
+export class AjaxResult<T = any> {
   readonly code: number;
   readonly msg: string;
+  readonly data?: T;
   [key: string]: any;
-  constructor(code: number, msg: string, data: any) {
+
+  constructor(code: number, msg: string, data?: T) {
     this.code = code;
     this.msg = msg;
+    this.data = data;
 
-    Object.assign(this, data);
+    if (data && typeof data === 'object') {
+      Object.assign(this, data);
+    }
   }
 
-  static success(data?: any, msg = '操作成功') {
-    let newData;
+  static success<T>(data?: T, msg = 'ok'): AjaxResult<T> {
+    let newData: T | { data: T };
     if (typeof data !== 'object' || data instanceof Array) {
       newData = { data };
     } else {
       newData = data;
     }
-    return new AjaxResult(200, msg, newData);
+    return new AjaxResult<T>(200, msg, newData as T);
   }
 
-  static error(msg = '操作失败', code = 500) {
+  static error(msg = 'error', code = 500): AjaxResult<null> {
     return new AjaxResult(code, msg, null);
   }
 }

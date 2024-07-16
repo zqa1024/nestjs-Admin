@@ -19,6 +19,7 @@ import { AuthDto } from './dto';
 import { Tokens } from './types';
 import { CustomLoggerService } from 'src/modules/common/customLogger.service';
 import { ApiTags } from '@nestjs/swagger';
+import { APIResponse } from '../common/decorators/APIResponse.decorator';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -64,6 +65,7 @@ export class AuthController {
   }
 
   @Get('/currentUser')
+  @APIResponse(AuthDto)
   async currentUser(@GetCurrentUserId() userId: number): Promise<any> {
     console.log('userId', userId);
     return await this.authService.currentUser(userId);

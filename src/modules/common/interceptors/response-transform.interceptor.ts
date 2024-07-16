@@ -10,15 +10,18 @@ import { AjaxResult } from '../class';
 import type { Observable } from 'rxjs';
 
 @Injectable()
-export class ResponseTransformInterceptor implements NestInterceptor {
+export class ResponseTransformInterceptor<T>
+  implements NestInterceptor<T, Response<T>>
+{
   constructor(private readonly reflector: Reflector) {}
 
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>,
-  ): Observable<any> {
+  ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
+        console.log('data>>>>>>', data);
         const keep = this.reflector.getAllAndOverride<boolean>('keep', [
           context.getHandler(),
           context.getClass(),
@@ -27,9 +30,16 @@ export class ResponseTransformInterceptor implements NestInterceptor {
           return data;
         }
         const response = context.switchToHttp().getResponse();
+
         response.header('Content-Type', 'application/json; charset=utf-8');
-        return AjaxResult.success(data);
+        return AjaxResult.success<T>(data);
       }),
     );
   }
+}
+
+interface Response<T> {
+  code: number;
+  msg: string;
+  data: T;
 }

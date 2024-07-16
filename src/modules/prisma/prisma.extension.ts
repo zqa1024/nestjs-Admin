@@ -21,6 +21,14 @@ export const extendedPrismaClient = new PrismaClient().$extends({
       },
     },
   },
+  client: {
+    omit: {
+      user: {
+        hash: true,
+        hashedRt: true,
+      },
+    },
+  },
 });
 
 export type ExtendedPrismaClient = typeof extendedPrismaClient;
