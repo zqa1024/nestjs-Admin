@@ -15,11 +15,12 @@ import { AtGuard } from 'src/modules/common/guards/at.guards';
 import { GetCurrentUser } from 'src/modules/common/decorators/get-current-user.decorator';
 
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
+import { AuthDto, CreateUserDto, ListUserDto, TokensDto, UserDto } from './dto';
 import { Tokens } from './types';
 import { CustomLoggerService } from 'src/modules/common/customLogger.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { APIResponse } from '../common/decorators/APIResponse.decorator';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -32,25 +33,25 @@ export class AuthController {
   @Publish()
   @Post('/local/signup')
   @HttpCode(HttpStatus.CREATED)
-  async signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
+  @APIResponse(TokensDto)
+  async signupLocal(@Body() dto: CreateUserDto): Promise<Tokens> {
     return await this.authService.signupLocal(dto);
   }
 
   @Publish()
-  @Post('/local/signin')
+  @Post('/local/sign')
   @HttpCode(HttpStatus.OK)
-  async singinLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    // this.customLogger.log('Hello world');
-    return await this.authService.singinLocal(dto);
+  async signLocal(@Body() dto: AuthDto): Promise<Tokens> {
+    return await this.authService.signLocal(dto);
   }
 
   @UseGuards(AtGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  async louout(@GetCurrentUserId() userId: number): Promise<boolean> {
-    // console.log('userId', userId);
-
-    return await this.authService.louout(userId);
+  @ApiResponse({ type: Promise<boolean> })
+  async logout(@GetCurrentUserId() userId: number): Promise<boolean> {
+    console.log('userId', userId);
+    return await this.authService.logout(userId);
   }
 
   @Publish()
@@ -65,9 +66,18 @@ export class AuthController {
   }
 
   @Get('/currentUser')
-  @APIResponse(AuthDto)
+  @APIResponse(UserDto)
   async currentUser(@GetCurrentUserId() userId: number): Promise<any> {
     console.log('userId', userId);
     return await this.authService.currentUser(userId);
+  }
+
+  /**
+   * 获取用户信息
+   */
+  @Get('users')
+  @APIResponse([ListUserDto])
+  async getUsers(): Promise<User[]> {
+    return await this.authService.getUsers();
   }
 }

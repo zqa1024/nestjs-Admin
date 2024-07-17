@@ -1,12 +1,14 @@
+import { ListUserDto, UserDto } from 'src/modules/auth/dto';
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'nestjs-Prisma';
-import { AuthDto } from './dto';
+import { AuthDto, CreateUserDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ConfigService } from '@nestjs/config';
+import { User } from '@prisma/client';
 
 const permissions = [
   {
@@ -488,7 +490,7 @@ export class AuthService {
   }
 
   //本地注册
-  async signupLocal(dto: AuthDto): Promise<Tokens> {
+  async signupLocal(dto: CreateUserDto): Promise<Tokens> {
     console.log('signupLocal', dto);
     const { password, ...rest } = dto;
     const hash = await argon.hash(password);
@@ -518,12 +520,16 @@ export class AuthService {
   }
 
   //本地登录
-  async singinLocal(dto: AuthDto): Promise<any> {
+  async signLocal(dto: AuthDto): Promise<any> {
     // this.myMethod();
-    console.log('singinLocal', dto);
+    console.log('signLocal', dto);
     const user = await this.prisma.user.findUnique({
       where: {
         username: dto.username,
+      },
+      omit: {
+        hash: false,
+        hashedRt: false,
       },
     });
     console.log('user', user);
@@ -531,9 +537,9 @@ export class AuthService {
       throw new ForbiddenException('Access Denied');
     }
 
-    const passwordMatches =
-      (await argon.verify(user.hash, dto.password)) ||
-      (await argon.verify(user.hash, await argon.hash(dto.password)));
+    console.log('user.hash', user);
+
+    const passwordMatches = await argon.verify(user.hash, dto.password);
 
     if (!passwordMatches) {
       throw new ForbiddenException('Access Denied');
@@ -574,22 +580,31 @@ export class AuthService {
   }
 
   //登出
-  async louout(userId: number): Promise<boolean> {
+  async logout(userId: number): Promise<boolean> {
     if (!userId) {
       throw new ForbiddenException('Access Denied');
     }
-    await this.prisma.user.updateMany({
-      where: {
-        id: userId,
-        hashedRt: {
-          not: null,
+    try {
+      const res = await this.prisma.user.update({
+        where: {
+          id: userId,
+          hashedRt: {
+            not: null,
+          },
         },
-      },
-      data: {
-        hashedRt: null,
-      },
-    });
-    return true;
+        data: {
+          hashedRt: null,
+        },
+        omit: {
+          hash: true,
+          hashedRt: true,
+        },
+      });
+      console.log('logout res', userId, res);
+      return true;
+    } catch (error) {
+      console.log('logout error', error);
+    }
   }
 
   //获取用户信息
@@ -617,5 +632,10 @@ export class AuthService {
         },
       },
     };
+  }
+
+  //获取用户信息
+  async getUsers(): Promise<User[]> {
+    return await this.prisma.user.findMany();
   }
 }

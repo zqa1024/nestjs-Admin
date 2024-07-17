@@ -44,6 +44,7 @@ async function bootstrap() {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   };
   const document = SwaggerModule.createDocument(app, config, options);
+
   SwaggerModule.setup('api', app, document, {
     jsonDocumentUrl: 'swagger/json',
   });
